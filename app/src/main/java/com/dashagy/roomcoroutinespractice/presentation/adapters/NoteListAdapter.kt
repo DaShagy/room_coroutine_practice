@@ -11,15 +11,26 @@ import com.dashagy.roomcoroutinespractice.domain.entities.Note
 
 
 class NoteListAdapter(
-    private var dataset: MutableList<Note>
+    private var dataset: MutableList<Note>,
+    private val onClickListener: (Note) -> Unit
 ) : RecyclerView.Adapter<NoteListAdapter.NoteViewHolder>() {
 
     fun updateAdapterDataset(data: MutableList<Note>){
         dataset = data
     }
 
-    inner class NoteViewHolder(view: View) : RecyclerView.ViewHolder(view){
+    inner class NoteViewHolder(
+        view: View,
+        onItemClickListener: (Int) -> Unit
+    ) : RecyclerView.ViewHolder(view){
+
         val textView: TextView = view.findViewById(R.id.title)
+
+        init {
+            view.setOnClickListener {
+                onItemClickListener(adapterPosition)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
@@ -27,7 +38,7 @@ class NoteListAdapter(
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.notes_list_recycler_view, parent, false)
 
-        return NoteViewHolder(view)
+        return NoteViewHolder(view) { onClickListener(dataset[it]) }
     }
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {

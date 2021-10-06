@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.dashagy.roomcoroutinespractice.R
@@ -36,7 +37,9 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this, viewModelFactory).get(NoteViewModel::class.java)
 
-        adapter = NoteListAdapter(mutableListOf())
+        adapter = NoteListAdapter(mutableListOf()){
+            Toast.makeText(this, it.title, Toast.LENGTH_LONG).show()
+        }
 
         val recyclerView = findViewById<RecyclerView>(R.id.notesList)
         recyclerView.adapter = adapter
