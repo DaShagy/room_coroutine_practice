@@ -23,7 +23,7 @@ import com.dashagy.roomcoroutinespractice.presentation.viewmodel.NoteViewModelFa
 
 class MainActivity : AppCompatActivity() {
 
-    private val database by lazy { NotesDatabase.getDatabase(this) }
+    /*private val database by lazy { NotesDatabase.getDatabase(this) }
     private val repository by lazy { NoteRepositoryImpl(database.noteDao) }
 
     private val insertNoteUseCase by lazy { InsertNoteUseCase(repository) }
@@ -41,13 +41,13 @@ class MainActivity : AppCompatActivity() {
     }
     private lateinit var viewModel: NoteViewModel
 
-    private lateinit var adapter: NoteListAdapter
+    private lateinit var adapter: NoteListAdapter*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        viewModel = ViewModelProvider(this, viewModelFactory).get(NoteViewModel::class.java)
+        /*viewModel = ViewModelProvider(this, viewModelFactory).get(NoteViewModel::class.java)
 
         adapter = NoteListAdapter(
             mutableListOf(),
@@ -93,37 +93,37 @@ class MainActivity : AppCompatActivity() {
 
         cancelNoteButton.setOnClickListener{
             onClickCancelButton()
+        }*/
+    }
+
+        /*private fun onClickNoteListItemDeleteButton(it: Note) {
+            viewModel.deleteSelectedNote(it)
         }
-    }
 
-    private fun onClickNoteListItemDeleteButton(it: Note) {
-        viewModel.deleteSelectedNote(it)
-    }
-
-    private fun onClickCancelButton() {
-        viewModel.updateState(NoteState.CreateNoteState)
-        viewModel.update("", "")
-    }
-
-    private fun updateUI(list: List<Note>) {
-        adapter.updateAdapterDataset(list as MutableList<Note>)
-        adapter.notifyDataSetChanged()
-    }
-
-    private fun onClickInsertNote(title: String, content: String) {
-        if (title.isNotBlank()) {
-            viewModel.insertNoteIntoDb(title, content)
+        private fun onClickCancelButton() {
+            viewModel.updateState(NoteState.CreateNoteState)
             viewModel.update("", "")
-        } else {
-            Toast.makeText(
-                this,
-                "El campo titulo no debe estar vacio",
-                Toast.LENGTH_SHORT)
-                .show()
         }
-    }
 
-    private fun onClickNoteListItem(note: Note){
-        note.id?.let { viewModel.getNoteToEdit(it) }
-    }
+        private fun updateUI(list: List<Note>) {
+            adapter.updateAdapterDataset(list as MutableList<Note>)
+            adapter.notifyDataSetChanged()
+        }
+
+        private fun onClickInsertNote(title: String, content: String) {
+            if (title.isNotBlank()) {
+                viewModel.insertNoteIntoDb(title, content)
+                viewModel.update("", "")
+            } else {
+                Toast.makeText(
+                    this,
+                    "El campo titulo no debe estar vacio",
+                    Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+
+        private fun onClickNoteListItem(note: Note){
+            note.id?.let { viewModel.getNoteToEdit(it) }
+        }*/
 }
