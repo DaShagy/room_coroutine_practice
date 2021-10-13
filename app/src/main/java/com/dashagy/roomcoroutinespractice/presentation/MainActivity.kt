@@ -113,6 +113,7 @@ class MainActivity : AppCompatActivity() {
     private fun onClickInsertNote(title: String, content: String) {
         if (title.isNotBlank()) {
             viewModel.insertNoteIntoDb(title, content)
+            viewModel.update("", "")
         } else {
             Toast.makeText(
                 this,

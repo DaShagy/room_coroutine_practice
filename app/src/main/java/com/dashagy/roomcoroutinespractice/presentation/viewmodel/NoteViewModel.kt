@@ -25,11 +25,11 @@ class NoteViewModel(
     private var _noteContent: MutableLiveData<String> = MutableLiveData()
     val noteContent get() = _noteContent as LiveData<String>
 
-    private var noteId: Int? = null
+    private var noteId: Int = -1
 
     val notesList: LiveData<List<Note>> = getNotes().asLiveData()
 
-    fun update(title: String, content: String, id: Int? = null){
+    fun update(title: String, content: String, id: Int = -1){
         _noteTitle.value = title
         _noteContent.value = content
         noteId = id
