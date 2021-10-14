@@ -38,8 +38,8 @@ class NoteViewModel(
         update(title, content, noteId)
         insertNote(
             Note(
-                title = _noteTitle.value!!,
-                content = _noteContent.value!!,
+                title = title,
+                content = content,
                 timestamp = System.currentTimeMillis(),
                 id = noteId
             )
