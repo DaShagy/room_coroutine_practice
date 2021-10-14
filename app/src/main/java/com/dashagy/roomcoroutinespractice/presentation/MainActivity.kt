@@ -12,6 +12,7 @@ import com.dashagy.roomcoroutinespractice.R
 import com.dashagy.roomcoroutinespractice.data.NotesDatabase
 import com.dashagy.roomcoroutinespractice.data.repositories.NoteRepositoryImpl
 import com.dashagy.roomcoroutinespractice.domain.entities.Note
+import com.dashagy.roomcoroutinespractice.domain.usecases.DeleteNoteUseCase
 import com.dashagy.roomcoroutinespractice.domain.usecases.GetNoteByIdUseCase
 import com.dashagy.roomcoroutinespractice.domain.usecases.GetNotesUseCase
 import com.dashagy.roomcoroutinespractice.domain.usecases.InsertNoteUseCase
@@ -28,12 +29,14 @@ class MainActivity : AppCompatActivity() {
     private val insertNoteUseCase by lazy { InsertNoteUseCase(repository) }
     private val getNotesUseCase by lazy { GetNotesUseCase(repository) }
     private val getNoteByIdUseCase by lazy { GetNoteByIdUseCase(repository) }
+    private val deleteNoteUseCase by lazy { DeleteNoteUseCase(repository) }
 
     private val viewModelFactory by lazy {
         NoteViewModelFactory(
             insertNote = insertNoteUseCase,
             getNotes = getNotesUseCase,
-            getNoteById = getNoteByIdUseCase
+            getNoteById = getNoteByIdUseCase,
+            deleteNote = deleteNoteUseCase
         )
     }
     private lateinit var viewModel: NoteViewModel
@@ -46,9 +49,11 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this, viewModelFactory).get(NoteViewModel::class.java)
 
-        adapter = NoteListAdapter(mutableListOf()){
-            onClickNoteListItem(it)
-        }
+        adapter = NoteListAdapter(
+            mutableListOf(),
+            { onClickNoteListItem(it) },
+            { onClickNoteListItemDeleteButton(it)}
+        )
 
         val recyclerView = findViewById<RecyclerView>(R.id.notesList)
         recyclerView.adapter = adapter
@@ -91,6 +96,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun onClickNoteListItemDeleteButton(it: Note) {
+        viewModel.deleteSelectedNote(it)
+    }
+
     private fun onClickCancelButton() {
         viewModel.updateState(NoteState.CreateNoteState)
         viewModel.update("", "")
@@ -104,6 +113,7 @@ class MainActivity : AppCompatActivity() {
     private fun onClickInsertNote(title: String, content: String) {
         if (title.isNotBlank()) {
             viewModel.insertNoteIntoDb(title, content)
+            viewModel.update("", "")
         } else {
             Toast.makeText(
                 this,

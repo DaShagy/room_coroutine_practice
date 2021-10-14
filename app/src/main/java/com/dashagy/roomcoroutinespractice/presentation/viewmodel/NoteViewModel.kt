@@ -2,6 +2,7 @@ package com.dashagy.roomcoroutinespractice.presentation.viewmodel
 
 import androidx.lifecycle.*
 import com.dashagy.roomcoroutinespractice.domain.entities.Note
+import com.dashagy.roomcoroutinespractice.domain.usecases.DeleteNoteUseCase
 import com.dashagy.roomcoroutinespractice.domain.usecases.GetNoteByIdUseCase
 import com.dashagy.roomcoroutinespractice.domain.usecases.GetNotesUseCase
 import com.dashagy.roomcoroutinespractice.domain.usecases.InsertNoteUseCase
@@ -11,7 +12,8 @@ import kotlinx.coroutines.launch
 class NoteViewModel(
     private val insertNote: InsertNoteUseCase,
     private val getNotes: GetNotesUseCase,
-    private val getNoteById: GetNoteByIdUseCase
+    private val getNoteById: GetNoteByIdUseCase,
+    private val deleteNote: DeleteNoteUseCase
 ) : ViewModel() {
 
     private var _state : MutableLiveData<NoteState> = MutableLiveData()
@@ -23,11 +25,11 @@ class NoteViewModel(
     private var _noteContent: MutableLiveData<String> = MutableLiveData()
     val noteContent get() = _noteContent as LiveData<String>
 
-    private var noteId: Int? = null
+    private var noteId: Int = -1
 
     val notesList: LiveData<List<Note>> = getNotes().asLiveData()
 
-    fun update(title: String, content: String, id: Int? = null){
+    fun update(title: String, content: String, id: Int = -1){
         _noteTitle.value = title
         _noteContent.value = content
         noteId = id
@@ -51,6 +53,10 @@ class NoteViewModel(
             updateState(NoteState.EditNoteState)
             update(it.title, it.content, it.id)
         }
+    }
+
+    fun deleteSelectedNote(note: Note) = viewModelScope.launch {
+        deleteNote(note)
     }
 
     fun updateState(noteState: NoteState) {
